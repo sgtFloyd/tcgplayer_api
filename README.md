@@ -34,7 +34,7 @@
 **Params:**
 - pk: Partner Key, *required*
 - p: Product Name, *required*
-- s: Set Name, *optional*
+- s: Set Name, *required*
 - v: Number of the vendors to return, *optional, max: 8*
 
 *For multiple pricing or deck collection inquires we request that once per day between 3:00am - 7:00am EST you pull down all pricing for all products on TCGplayer that you will be listing on your site / app. You are responsible for storing this pricing in your own database, as your database is what should be used for pricing of decks, collections or any inquiry within that 24hr period that requires more than one price inquiry at at time.*
