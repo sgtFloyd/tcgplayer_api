@@ -2,10 +2,14 @@ require 'active_support/core_ext/hash/conversions'
 require 'open-uri'
 
 class TCGplayerAPI
-  VERSION = '0.0.1'
+  VERSION = '0.0.2'
 
   class << self
     BASE_URL = 'http://partner.tcgplayer.com/x3'
+
+    def partner_key=(pk)
+      @partner_key = pk
+    end
 
     # Fetch High/Mid/Low prices for the given card. If set_name is excluded,
     # returns the cheapest printing across all sets.
@@ -25,7 +29,7 @@ class TCGplayerAPI
   private
 
     def get(endpoint, params)
-      params[:pk] = 'TCGTEST'
+      params[:pk] = @partner_key || 'TCGTEST'
       encoded_params = '?' + URI.encode_www_form(params)
       url = [BASE_URL, endpoint, encoded_params].join
       Hash.from_xml open(url)
