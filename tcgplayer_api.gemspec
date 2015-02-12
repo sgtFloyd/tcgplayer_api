@@ -15,5 +15,5 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.files         = Dir['lib/**/*.rb']
 
-  s.add_dependency "nokogiri"
+  s.add_dependency "activesupport"
 end
