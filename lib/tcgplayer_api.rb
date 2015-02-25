@@ -2,10 +2,10 @@ require 'active_support/core_ext/hash/conversions'
 require 'open-uri'
 
 class TCGplayerAPI
-  VERSION = '0.0.2'
+  VERSION = '0.0.3'
 
   class << self
-    attr_accessor :partner_key
+    attr_accessor :partner_key, :logger
     BASE_URL = 'http://partner.tcgplayer.com/x3'
 
     # Fetch High/Mid/Low prices for the given card. If set_name is excluded,
@@ -29,6 +29,7 @@ class TCGplayerAPI
       params[:pk] = partner_key || 'TCGTEST'
       encoded_params = '?' + URI.encode_www_form(params)
       url = [BASE_URL, endpoint, encoded_params].join
+      @logger.info "GET #{url}" if @logger
       Hash.from_xml open(url)
     end
 
