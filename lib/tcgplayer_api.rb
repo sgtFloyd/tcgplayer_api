@@ -2,7 +2,7 @@ require 'active_support/core_ext/hash/conversions'
 require 'open-uri'
 
 class TCGplayerAPI
-  VERSION = '0.0.3'
+  VERSION = '0.0.4'
 
   class << self
     attr_accessor :partner_key, :logger
@@ -13,14 +13,20 @@ class TCGplayerAPI
     def price_points(card_name, set_name=nil)
       request_params = {p: card_name}
       request_params[:s] = set_name unless set_name.to_s.strip.empty?
-      get('/phl.asmx/p', request_params)["products"]["product"]
+      response = get('/phl.asmx/p', request_params)
+      @logger.info("RESPONSE #{response}") if @logger
+      raise response['error']['message'] if response['error']
+      return response['products']['product']
     end
 
     # Fetch prices from eight vendors for the given card printing.
     def vendor_prices(card_name, set_name=nil)
       request_params = {p: card_name, v: 8} # Default to the maximum of 8 results
       request_params[:s] = set_name unless set_name.to_s.strip.empty?
-      get('/pv.asmx/p', request_params)["prices"]
+      response = get('/pv.asmx/p', request_params)
+      @logger.info("RESPONSE #{response}") if @logger
+      raise response['error']['message'] if response['error']
+      return response['prices']
     end
 
   private
@@ -30,7 +36,7 @@ class TCGplayerAPI
       encoded_params = '?' + URI.encode_www_form(params)
       url = [BASE_URL, endpoint, encoded_params].join
       @logger.info "GET #{url}" if @logger
-      Hash.from_xml open(url)
+      return Hash.from_xml open(url)
     end
 
   end
